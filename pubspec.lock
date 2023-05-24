@@ -801,7 +801,7 @@ packages:
       path: "."
       ref: HEAD
       resolved-ref: b324da5aa204841d3b07754c49d80d5b13d8856e
-      url: "git@github.com:nightmare-space/settings.git"
+      url: "https://github.com/nightmare-space/settings"
     source: git
     version: "0.0.1"
   shelf:
