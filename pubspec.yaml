@@ -74,7 +74,7 @@ dependencies:
     git: https://github.com/nightmare-space/app_manager
   image_picker: ^0.8.5
   settings:
-    git: https://github.com/nightmare-space/settings
+    git: git@github.com:nightmare-space/settings.git
   path_provider: ^2.0.10
   device_info_plus: 8.1.0
 
