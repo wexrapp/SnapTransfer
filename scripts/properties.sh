@@ -6,3 +6,4 @@ APP_NAME_CN='速享'
 function process_echo() {
     echo -e -n "\\033[38;5;42m·\\033[0m \\033[38;5;38m\$1\\033[0m"
 }
+MAC_APP_NAME='Speed Share'
