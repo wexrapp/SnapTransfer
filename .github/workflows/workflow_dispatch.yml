@@ -207,7 +207,7 @@ jobs:
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}/..
-      - name: actions/setup-node@v2
+      - name: Setup node environment
         uses: actions/setup-node@v2
       
       - name: Install and set Flutter version
