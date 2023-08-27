@@ -161,7 +161,7 @@ jobs:
 
 
       # 
-      - name: Checkout the code
+      - name: Checkout current code
         uses: actions/checkout@v3
         with:
           ref: ${{ github.event.client_payload.ref }}
@@ -198,15 +198,22 @@ jobs:
           ref: 'main'
           path: "${{ github.workspace }}/ni"
 
+      - name: Setup CLI environment
+        run: |
+          cd ${{ github.workspace }}/ni
+          dart pub get
+
       - name: move file
         run: |
           mv "${{ github.workspace }}/user_center_frontend" "${{ github.workspace }}/../user_center_frontend"
           mv "${{ github.workspace }}/speed_share_extension" "${{ github.workspace }}/../speed_share_extension"
           mv "${{ github.workspace }}/behavior_api/behavior.dart" ./lib/global/behavior.dart
           mv "${{ github.workspace }}/behavior_api/behavior.g.dart" ./lib/global/behavior.g.dart
+
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}/..
+
       - name: Setup node environment
         uses: actions/setup-node@v2
       
@@ -220,7 +227,6 @@ jobs:
         
       - name: Building&&Packaging
         run: |
-          flutter config --enable-macos-desktop
           export PATH=$PATH:${{ github.workspace }}/ni
           ni release --build-mac-dmg
 
