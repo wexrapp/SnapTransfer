@@ -13,14 +13,6 @@ on:
   repository_dispatch:
     types:
       - api
-  workflow_call:
-    inputs:
-      runs-on:
-        required: true
-        type: string
-    secrets:
-      envPAT:
-        required: true
 env:
   # APP名称
   APP_NAME: SpeedShare
@@ -229,7 +221,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Checkout current code
-        uses: octo-org/example-repo/.github/workflows/reusable-workflow.yml@main
+        uses: nightmare-space/speed_share/.github/workflows/clone_code.yaml.yml@main
         with:
           runs-on: self-hosted-windows
         secrets:
