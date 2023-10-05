@@ -13,6 +13,7 @@ on:
   repository_dispatch:
     types:
       - api
+
 env:
   # APP名称
   APP_NAME: SpeedShare
@@ -85,45 +86,6 @@ jobs:
   #         # curl -X POST -F "file=@${{ env.ZIP_NAME }}.deb" http://nightmare.press:444/api/v1/file/uploadfile/
   #         # curl --upload-file "${{ env.ZIP_NAME }}.deb" https://transfersh.com/${{ env.APP_NAME }}.deb
 
-  # clone-code:
-  #   runs-on: ${{ inputs.runs-on }}
-  #   environment: default
-  #   steps:
-  #     - name: Checkout current code
-  #       uses: actions/checkout@v3
-  #       with:
-  #         ref: ${{ github.event.client_payload.ref }}
-        
-  #     - name: Checkout speed_share_extension code
-  #       uses: actions/checkout@v3
-  #       with:
-  #         repository: 'mengyanshou/speed_share_extension'
-  #         token: ${{ secrets.GH_PAT }}
-  #         ref: 'main'
-  #         path: "${{ github.workspace }}/speed_share_extension"
-
-  #     - name: Checkout behavior_api code
-  #       uses: actions/checkout@v3
-  #       with:
-  #         repository: 'mengyanshou/behavior_api'
-  #         token: ${{ secrets.GH_PAT }}
-  #         ref: 'main'
-  #         path: "${{ github.workspace }}/behavior_api"
-
-  #     - name: Checkout user_center_frontend code
-  #       uses: actions/checkout@v3
-  #       with:
-  #         repository: 'mengyanshou/user_center_frontend'
-  #         token: ${{ secrets.GH_PAT }}
-  #         ref: 'main'
-  #         path: "${{ github.workspace }}/user_center_frontend"
-
-  #     - name: move file
-  #       run: |
-  #         move "${{ github.workspace }}/user_center_frontend" "${{ github.workspace }}/../user_center_frontend"
-  #         move "${{ github.workspace }}/speed_share_extension" "${{ github.workspace }}/../speed_share_extension"
-  #         mv "${{ github.workspace }}/behavior_api/behavior.dart" ./lib/global/behavior.dart
-  #         mv "${{ github.workspace }}/behavior_api/behavior.g.dart" ./lib/global/behavior.g.dart
   build-mac:
     # runs-on: macos-latest
     runs-on: self-hosted-mac
@@ -211,42 +173,53 @@ jobs:
         run: |
           export PATH=$PATH:${{ github.workspace }}/ni
           ni default -u
+            
   build-windows:
     # The type of runner that the job will run on
     # runs-on: windows-latest
-    env:
-      PARAM1: value1  # 设置环境变量 PARAM1
     runs-on: self-hosted-windows
     environment: default
-    
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Create Parameter File
-        run: echo "parameter_value" > parameter.txt
-      - name: Trigger Sub Workflow
-        uses: actions/github-script@v5
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const { data } = await github.actions.createWorkflowDispatch({
-              owner: 'nightmare-space',
-              repo: 'speed_share',
-              workflow_id: 'Sub Workflow',
-              inputs: {
-                parameter_file: 'parameter.txt'
-              }
-            });
-            console.log(data);
+      - name: test
+        run: ni
       - name: Checkout current code
         uses: actions/checkout@v3
         with:
           ref: ${{ github.event.client_payload.ref }}
-      - name: Trigger Sub Workflow
-        run: |
-          echo "Running Sub Workflow"
-          echo "PARAM1=$PARAM1" >> $GITHUB_ENV  # 将参数传递给环境变量
+        
+      - name: Checkout speed_share_extension code
+        uses: actions/checkout@v3
+        with:
+          repository: 'mengyanshou/speed_share_extension'
+          token: ${{ secrets.GH_PAT }}
+          ref: 'main'
+          path: "${{ github.workspace }}/speed_share_extension"
 
-      - name: Sub Workflow
-        uses: ./.github/workflows/clone_code.yml
+      - name: Checkout behavior_api code
+        uses: actions/checkout@v3
+        with:
+          repository: 'mengyanshou/behavior_api'
+          token: ${{ secrets.GH_PAT }}
+          ref: 'main'
+          path: "${{ github.workspace }}/behavior_api"
+
+      - name: Checkout user_center_frontend code
+        uses: actions/checkout@v3
+        with:
+          repository: 'mengyanshou/user_center_frontend'
+          token: ${{ secrets.GH_PAT }}
+          ref: 'main'
+          path: "${{ github.workspace }}/user_center_frontend"
+
+      - name: move file
+        run: |
+          move "${{ github.workspace }}/user_center_frontend" "${{ github.workspace }}/../user_center_frontend"
+          move "${{ github.workspace }}/speed_share_extension" "${{ github.workspace }}/../speed_share_extension"
+          mv "${{ github.workspace }}/behavior_api/behavior.dart" ./lib/global/behavior.dart
+          mv "${{ github.workspace }}/behavior_api/behavior.g.dart" ./lib/global/behavior.g.dart
+
+      
       - name: Install and set Flutter version
         uses: subosito/flutter-action@v2
         with:
