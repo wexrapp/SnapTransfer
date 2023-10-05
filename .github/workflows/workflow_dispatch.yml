@@ -211,17 +211,31 @@ jobs:
         run: |
           export PATH=$PATH:${{ github.workspace }}/ni
           ni default -u
-            
+  job1:
+    runs-on: ubuntu-latest
+    env:
+      RUNS_ON: ${{ runner.os }}
+    steps:
+      - name: Step 1
+        run: 'echo "Current runs-on value: $RUNS_ON"'
+      - name: Step 2
+        run: echo "Running job2..."
   build-windows:
     # The type of runner that the job will run on
     # runs-on: windows-latest
     runs-on: self-hosted-windows
     environment: default
     
+    needs: job1
+    outputs:
+      runs_on: ${{ needs.job1.outputs.runs_on }}
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Checkout current code
-        uses: nightmare-space/speed_share/.github/workflows/clone_code.yaml.yml@main
+      - name: Step 1
+        run: echo "Using runs-on value from job1: ${{ needs.job1.outputs.runs_on }}"
+      - name: Step 2
+        run: echo "Job2 completed."
+      - uses: nightmare-space/speed_share/.github/workflows/clone_code.yaml.yml@main
         with:
           runs-on: self-hosted-windows
         secrets:
