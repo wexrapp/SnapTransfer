@@ -220,6 +220,22 @@ jobs:
     environment: default
     
     steps:
+      - name: Create Parameter File
+        run: echo "parameter_value" > parameter.txt
+      - name: Trigger Sub Workflow
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { data } = await github.actions.createWorkflowDispatch({
+              owner: 'nightmare-space',
+              repo: 'speed_share',
+              workflow_id: 'Sub Workflow',
+              inputs: {
+                parameter_file: 'parameter.txt'
+              }
+            });
+            console.log(data);
       - name: Checkout current code
         uses: actions/checkout@v3
         with:
