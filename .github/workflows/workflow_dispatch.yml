@@ -235,12 +235,6 @@ jobs:
         run: "echo Using runs-on value from job1: ${{ needs.job1.outputs.runs_on }}"
       - name: Step 2
         run: echo "Job2 completed."
-      - uses: nightmare-space/speed_share/.github/workflows/clone_code.yaml.yml@main
-        with:
-          runs-on: self-hosted-windows
-        secrets:
-          envPAT: ${{ secrets.envPAT }}
-
 
       - name: Install and set Flutter version
         uses: subosito/flutter-action@v2
