@@ -214,22 +214,19 @@ jobs:
   build-windows:
     # The type of runner that the job will run on
     # runs-on: windows-latest
+    env:
+      PARAM1: value1  # 设置环境变量 PARAM1
     runs-on: self-hosted-windows
     environment: default
     
     steps:
-      - name: Set parameters
-        id: parameters
-        run: echo "::set-output name=param1::value1"  # 设置参数 param1
-
       - name: Trigger Sub Workflow
-        uses: actions/trigger-workflow@v2
-        with:
-          workflow: Sub Workflow.yml  # 指定要触发的子工作流配置文件
-          ref: main
-          token: ${{ secrets.GITHUB_TOKEN }}
-          inputs:
-            param1: ${{ steps.parameters.outputs.param1 }}
+        run: |
+          echo "Running Sub Workflow"
+          echo "PARAM1=$PARAM1" >> $GITHUB_ENV  # 将参数传递给环境变量
+
+      - name: Sub Workflow
+        uses: ./.github/workflows/clone_code.yml
       - name: Install and set Flutter version
         uses: subosito/flutter-action@v2
         with:
