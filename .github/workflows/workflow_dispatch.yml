@@ -183,6 +183,7 @@ jobs:
     steps:
       - name: test
         run: ni
+        shell: cmd
       - name: Checkout current code
         uses: actions/checkout@v3
         with:
