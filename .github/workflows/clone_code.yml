@@ -1,0 +1,19 @@
+name: Sub Workflow
+
+on:
+  workflow_run:
+    workflows: ["Main Workflow"]
+    types:
+      - completed
+
+jobs:
+  sub_job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Use parameter from Main Workflow
+        run: |
+          echo "Received param1: $param1"  # 使用传递的参数 param1
